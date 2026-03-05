@@ -100,6 +100,7 @@ router.patch(
     body('username')
       .optional()
       .trim()
+      .escape()
       .isAlphanumeric()
       .withMessage('El nombre de usuario solo puede contener letras y números')
       .isLength({ min: 3, max: 30 })

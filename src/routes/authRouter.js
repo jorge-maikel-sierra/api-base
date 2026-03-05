@@ -41,6 +41,7 @@ router.post(
   [
     body('username')
       .trim()
+      .escape()
       .isAlphanumeric()
       .withMessage('El nombre de usuario solo puede contener letras y números')
       .isLength({ min: 3, max: 30 })
@@ -51,6 +52,7 @@ router.post(
       .withMessage('Debe ser un email válido')
       .normalizeEmail(),
     body('password')
+      .trim()
       .isLength({ min: 8 })
       .withMessage('La contraseña debe tener al menos 8 caracteres'),
   ],
@@ -93,7 +95,7 @@ router.post(
       .isEmail()
       .withMessage('Debe ser un email válido')
       .normalizeEmail(),
-    body('password').notEmpty().withMessage('La contraseña es obligatoria'),
+    body('password').trim().notEmpty().withMessage('La contraseña es obligatoria'),
   ],
   validate,
   passport.authenticate('local', { session: false }),
