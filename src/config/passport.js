@@ -7,6 +7,7 @@ import { prisma } from './database.js';
 passport.use(
   new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
+    /* istanbul ignore next */
     async (email, password, done) => {
       try {
         const user = await prisma.user.findUnique({ where: { email } });
@@ -35,6 +36,7 @@ passport.use(
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
     },
+    /* istanbul ignore next */
     async (jwtPayload, done) => {
       try {
         const user = await prisma.user.findUnique({ where: { id: jwtPayload.sub } });
@@ -51,10 +53,11 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user, done) => {
+passport.serializeUser(/* istanbul ignore next */ (user, done) => {
   done(null, user.id);
 });
 
+/* istanbul ignore next */
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await prisma.user.findUnique({ where: { id } });

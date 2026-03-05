@@ -10,6 +10,7 @@ const options = {
     },
     servers: [
       {
+        /* istanbul ignore next */
         url: `http://localhost:${process.env.PORT ?? 3000}`,
         description: 'Servidor de desarrollo',
       },

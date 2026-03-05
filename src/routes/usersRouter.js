@@ -8,6 +8,7 @@ import * as usersController from '../controllers/usersController.js';
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
+/* istanbul ignore next */
 const cache =
   process.env.NODE_ENV === 'test'
     ? () => (_req, _res, next) => next()

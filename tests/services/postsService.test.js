@@ -39,6 +39,13 @@ describe('postsService.findAll', () => {
     expect(result.data).toBeInstanceOf(Array);
     expect(result.meta).toMatchObject({ page: 1, limit: 10 });
   });
+
+  it('debería usar valores por defecto si se llama sin argumentos', async () => {
+    const result = await findAll();
+
+    expect(result.data).toBeInstanceOf(Array);
+    expect(result.meta).toMatchObject({ page: 1, limit: 20 });
+  });
 });
 
 describe('postsService.findById', () => {

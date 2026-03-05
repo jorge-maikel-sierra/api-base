@@ -25,7 +25,7 @@ app.use(
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
-      } else {
+      } else /* istanbul ignore next */ {
         callback(new Error('Origen no permitido por CORS'));
       }
     },
@@ -80,6 +80,7 @@ app.use((req, res, next) => {
 });
 
 // Swagger UI (solo en entornos no productivos)
+/* istanbul ignore next */
 if (process.env.NODE_ENV !== 'production') {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }

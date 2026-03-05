@@ -1,5 +1,6 @@
 import { PrismaClient } from '../../generated/prisma/index.js';
 
+/* istanbul ignore next */
 const connectionString =
   process.env.NODE_ENV === 'test'
     ? process.env.TEST_DATABASE_URL

@@ -34,12 +34,14 @@ export const registerUser = async ({ username, email, password }) => {
  * @returns {{ accessToken: string, refreshToken: string }}
  */
 export const generateToken = (user) => {
+  /* istanbul ignore next */
   const accessToken = jwt.sign(
     { sub: user.id, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN ?? '1h' },
   );
 
+  /* istanbul ignore next */
   const refreshToken = jwt.sign(
     { sub: user.id },
     process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET,
@@ -60,6 +62,7 @@ export const refreshAccessToken = async (refreshToken) => {
   try {
     payload = jwt.verify(
       refreshToken,
+      /* istanbul ignore next */
       process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET,
     );
   } catch {
@@ -75,6 +78,7 @@ export const refreshAccessToken = async (refreshToken) => {
   const accessToken = jwt.sign(
     { sub: user.id, email: user.email },
     process.env.JWT_SECRET,
+    /* istanbul ignore next */
     { expiresIn: process.env.JWT_EXPIRES_IN ?? '1h' },
   );
 

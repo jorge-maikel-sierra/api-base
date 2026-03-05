@@ -28,6 +28,13 @@ describe('usersService.findAll', () => {
     expect(result.meta).toMatchObject({ page: 1, limit: 10 });
     expect(typeof result.meta.total).toBe('number');
   });
+
+  it('debería usar valores por defecto si se llama sin argumentos', async () => {
+    const result = await findAll();
+
+    expect(result.data).toBeInstanceOf(Array);
+    expect(result.meta).toMatchObject({ page: 1, limit: 20 });
+  });
 });
 
 describe('usersService.findById', () => {

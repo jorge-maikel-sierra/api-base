@@ -1,6 +1,7 @@
 import { prisma } from '../../src/config/database.js';
-import { registerUser, generateToken } from '../../src/services/authService.js';
-import { ConflictError } from '../../src/errors/AppError.js';
+import { registerUser, generateToken, refreshAccessToken } from '../../src/services/authService.js';
+import { ConflictError, UnauthorizedError } from '../../src/errors/AppError.js';
+import jwt from 'jsonwebtoken';
 
 afterAll(async () => {
   await prisma.$disconnect();
@@ -53,5 +54,21 @@ describe('authService.generateToken', () => {
     const { accessToken, refreshToken } = generateToken(fakeUser);
 
     expect(accessToken).not.toBe(refreshToken);
+  });
+});
+
+describe('authService.refreshAccessToken', () => {
+  it('debería lanzar UnauthorizedError si el token es inválido', async () => {
+    await expect(refreshAccessToken('token.invalido.xxx')).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('debería lanzar UnauthorizedError si el usuario del token ya no existe', async () => {
+    // Generar un token con un usuario ficticio que no existe en la BD
+    const ghostToken = jwt.sign(
+      { sub: 999999 },
+      process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET,
+      { expiresIn: '7d' },
+    );
+    await expect(refreshAccessToken(ghostToken)).rejects.toThrow(UnauthorizedError);
   });
 });

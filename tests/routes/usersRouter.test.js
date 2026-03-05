@@ -97,3 +97,50 @@ describe('DELETE /api/v1/users/:id', () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe('PATCH /api/v1/users/:id', () => {
+  it('debería devolver 200 al actualizar el usuario', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ username: 'updateduser' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.username).toBe('updateduser');
+  });
+
+  it('debería devolver 401 sin token', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}`)
+      .send({ username: 'sintoken' });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('debería devolver 422 si el username tiene caracteres inválidos', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ username: 'usuario invalido!' });
+
+    expect(res.status).toBe(422);
+  });
+
+  it('debería devolver 422 si el email es inválido', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'no-es-un-email' });
+
+    expect(res.status).toBe(422);
+  });
+
+  it('debería devolver 404 si el usuario no existe', async () => {
+    const res = await request(app)
+      .patch('/api/v1/users/999999')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ username: 'inexistente' });
+
+    expect(res.status).toBe(404);
+  });
+});

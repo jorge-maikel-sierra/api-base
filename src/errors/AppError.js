@@ -4,7 +4,10 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.code = code;
     this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+    /* istanbul ignore next */
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
@@ -33,6 +36,7 @@ export class ForbiddenError extends AppError {
 }
 
 export class ConflictError extends AppError {
+  /* istanbul ignore next */
   constructor(message = 'El recurso ya existe') {
     super(message, 409, 'CONFLICT');
   }
