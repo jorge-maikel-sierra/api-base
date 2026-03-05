@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno — NUNCA versionar
+.env
+.env.local
+.env.*.local
+
+# Cliente Prisma generado — se regenera con prisma generate
+generated/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Cobertura de tests
+coverage/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
