@@ -5,21 +5,24 @@ import { ConflictError } from '../errors/AppError.js';
 
 /**
  * Registra un nuevo usuario en la base de datos.
+ * Usa transacción para garantizar atomicidad en la verificación + creación.
  * @param {{ username: string, email: string, password: string }} data
  * @returns {Promise<{ id: number, username: string, email: string }>}
  */
 export const registerUser = async ({ username, email, password }) => {
-  const existing = await prisma.user.findUnique({ where: { email } });
-
-  if (existing) {
-    throw new ConflictError('El email ya está registrado');
-  }
-
   const hashedPassword = await bcryptjs.hash(password, 10);
 
-  const user = await prisma.user.create({
-    data: { username, email, password: hashedPassword },
-    select: { id: true, username: true, email: true, createdAt: true },
+  const user = await prisma.$transaction(async (tx) => {
+    const existing = await tx.user.findUnique({ where: { email } });
+
+    if (existing) {
+      throw new ConflictError('El email ya está registrado');
+    }
+
+    return tx.user.create({
+      data: { username, email, password: hashedPassword },
+      select: { id: true, username: true, email: true, createdAt: true },
+    });
   });
 
   return user;

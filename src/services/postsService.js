@@ -76,28 +76,38 @@ export const createPost = async ({ title, content }, authorId) => {
 
 /**
  * Actualiza completamente un post. Solo el autor puede editarlo.
+ * Usa transacción para garantizar que la verificación de autoría y la actualización sean atómicas.
  * @param {number} id
  * @param {{ title: string, content: string }} data
  * @param {number} userId
  * @returns {Promise<object>}
  */
 export const updatePost = async (id, { title, content }, userId) => {
-  const post = await findById(id);
+  const updated = await prisma.$transaction(async (tx) => {
+    const post = await tx.post.findUnique({
+      where: { id },
+      select: { id: true, author: { select: { id: true } } },
+    });
 
-  if (post.author.id !== userId) {
-    throw new ForbiddenError('Solo el autor puede editar este post');
-  }
+    if (!post) {
+      throw new NotFoundError('Post no encontrado');
+    }
 
-  const updated = await prisma.post.update({
-    where: { id },
-    data: { title, content },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      updatedAt: true,
-      author: { select: { id: true, username: true } },
-    },
+    if (post.author.id !== userId) {
+      throw new ForbiddenError('Solo el autor puede editar este post');
+    }
+
+    return tx.post.update({
+      where: { id },
+      data: { title, content },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        updatedAt: true,
+        author: { select: { id: true, username: true } },
+      },
+    });
   });
 
   return updated;
@@ -105,16 +115,26 @@ export const updatePost = async (id, { title, content }, userId) => {
 
 /**
  * Elimina un post. Solo el autor puede eliminarlo.
+ * Usa transacción para garantizar que la verificación de autoría y el borrado sean atómicos.
  * @param {number} id
  * @param {number} userId
  * @returns {Promise<void>}
  */
 export const deletePost = async (id, userId) => {
-  const post = await findById(id);
+  await prisma.$transaction(async (tx) => {
+    const post = await tx.post.findUnique({
+      where: { id },
+      select: { id: true, author: { select: { id: true } } },
+    });
 
-  if (post.author.id !== userId) {
-    throw new ForbiddenError('Solo el autor puede eliminar este post');
-  }
+    if (!post) {
+      throw new NotFoundError('Post no encontrado');
+    }
 
-  await prisma.post.delete({ where: { id } });
+    if (post.author.id !== userId) {
+      throw new ForbiddenError('Solo el autor puede eliminar este post');
+    }
+
+    await tx.post.delete({ where: { id } });
+  });
 };
