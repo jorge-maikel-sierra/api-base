@@ -3,10 +3,10 @@ import { NotFoundError, ForbiddenError } from '../errors/AppError.js';
 
 /**
  * Obtiene una lista paginada de posts publicados.
- * @param {{ page: number, limit: number }} options
+ * @param {{ page: number, limit: number, sort: string, order: string }} options
  * @returns {Promise<{ data: object[], meta: object }>}
  */
-export const findAll = async ({ page = 1, limit = 20 } = {}) => {
+export const findAll = async ({ page = 1, limit = 20, sort = 'createdAt', order = 'desc' } = {}) => {
   const skip = (page - 1) * limit;
 
   const [posts, total] = await Promise.all([
@@ -20,7 +20,7 @@ export const findAll = async ({ page = 1, limit = 20 } = {}) => {
         createdAt: true,
         author: { select: { id: true, username: true } },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { [sort]: order },
     }),
     prisma.post.count(),
   ]);

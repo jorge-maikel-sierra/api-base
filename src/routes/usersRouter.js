@@ -35,6 +35,14 @@ router.get(
   [
     query('page').optional().isInt({ min: 1 }).withMessage('page debe ser un entero positivo'),
     query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('limit debe estar entre 1 y 100'),
+    query('sort')
+      .optional()
+      .isIn(['createdAt', 'username', 'email'])
+      .withMessage('sort debe ser createdAt, username o email'),
+    query('order')
+      .optional()
+      .isIn(['asc', 'desc'])
+      .withMessage('order debe ser asc o desc'),
   ],
   validate,
   usersController.getAll,

@@ -6,8 +6,8 @@ import * as usersService from '../services/usersService.js';
  */
 export const getAll = async (req, res, next) => {
   try {
-    const { page = 1, limit = 20 } = matchedData(req, { locations: ['query'] });
-    const result = await usersService.findAll({ page: Number(page), limit: Number(limit) });
+    const { page = 1, limit = 20, sort = 'createdAt', order = 'desc' } = matchedData(req, { locations: ['query'] });
+    const result = await usersService.findAll({ page: Number(page), limit: Number(limit), sort, order });
     return res.status(200).json(result);
   } catch (error) {
     return next(error);

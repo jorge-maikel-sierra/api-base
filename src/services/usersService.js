@@ -3,10 +3,10 @@ import { NotFoundError } from '../errors/AppError.js';
 
 /**
  * Obtiene una lista paginada de usuarios.
- * @param {{ page: number, limit: number }} options
+ * @param {{ page: number, limit: number, sort: string, order: string }} options
  * @returns {Promise<{ data: object[], meta: { total: number, page: number, limit: number } }>}
  */
-export const findAll = async ({ page = 1, limit = 20 } = {}) => {
+export const findAll = async ({ page = 1, limit = 20, sort = 'createdAt', order = 'desc' } = {}) => {
   const skip = (page - 1) * limit;
 
   const [users, total] = await Promise.all([
@@ -14,7 +14,7 @@ export const findAll = async ({ page = 1, limit = 20 } = {}) => {
       skip,
       take: limit,
       select: { id: true, username: true, email: true, createdAt: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { [sort]: order },
     }),
     prisma.user.count(),
   ]);
