@@ -18,24 +18,73 @@ const cache =
  * @swagger
  * /api/v1/users:
  *   get:
- *     summary: Obtener lista de usuarios
+ *     summary: Obtener lista de usuarios paginada
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *           default: 1
+ *         description: Número de página
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 20
+ *         description: Resultados por página (máx. 100)
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [createdAt, username, email]
+ *           default: createdAt
+ *         description: Campo por el que ordenar
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *           default: desc
+ *         description: Dirección del ordenamiento
  *     responses:
  *       200:
- *         description: Lista de usuarios
+ *         description: Lista de usuarios paginada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 meta:
+ *                   $ref: '#/components/schemas/PaginationMeta'
+ *             example:
+ *               data:
+ *                 - id: 1
+ *                   username: johndoe
+ *                   email: john@example.com
+ *                   createdAt: '2026-03-05T10:00:00.000Z'
+ *               meta:
+ *                 total: 1
+ *                 page: 1
+ *                 limit: 20
  *       401:
- *         description: No autorizado
+ *         description: Token ausente o inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       422:
+ *         description: Parámetros de consulta inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get(
   '/',
@@ -63,17 +112,53 @@ router.get(
  *   get:
  *     summary: Obtener un usuario por ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del usuario
  *     responses:
  *       200:
  *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *             example:
+ *               data:
+ *                 id: 1
+ *                 username: johndoe
+ *                 email: john@example.com
+ *                 createdAt: '2026-03-05T10:00:00.000Z'
+ *       401:
+ *         description: Token ausente o inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               error:
+ *                 message: Usuario no encontrado
+ *                 code: NOT_FOUND
+ *       422:
+ *         description: El ID debe ser un entero positivo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get(
   '/:id',
@@ -89,17 +174,56 @@ router.get(
  *   patch:
  *     summary: Actualizar parcialmente un usuario
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del usuario a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserPatchInput'
+ *           example:
+ *             username: nuevonombre
+ *             email: nuevo@example.com
  *     responses:
  *       200:
- *         description: Usuario actualizado
+ *         description: Usuario actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Token ausente o inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       422:
+ *         description: Error de validación — username o email inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               error:
+ *                 message: El nombre de usuario solo puede contener letras y números
+ *                 code: VALIDATION_ERROR
  */
 router.patch(
   '/:id',
@@ -131,17 +255,34 @@ router.patch(
  *   delete:
  *     summary: Eliminar un usuario
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del usuario a eliminar
  *     responses:
  *       204:
- *         description: Usuario eliminado
+ *         description: Usuario eliminado correctamente (sin cuerpo de respuesta)
+ *       401:
+ *         description: Token ausente o inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               error:
+ *                 message: Usuario no encontrado
+ *                 code: NOT_FOUND
  */
 router.delete(
   '/:id',

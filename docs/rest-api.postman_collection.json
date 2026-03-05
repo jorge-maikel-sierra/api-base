@@ -1,0 +1,291 @@
+{
+  "info": {
+    "name": "REST API Node.js",
+    "description": "Colección de endpoints de la API REST construida con Express.js, Prisma y PostgreSQL.\n\n## Uso\n1. Importar esta colección en Postman.\n2. Crear un entorno con la variable `baseUrl` apuntando a `http://localhost:3000`.\n3. Ejecutar **Auth / Login** y copiar el `accessToken` en la variable `token` del entorno.\n4. El resto de requests protegidos usarán el token automáticamente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "Access token JWT. Se obtiene del endpoint POST /auth/login."
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string",
+      "description": "Refresh token JWT. Se obtiene del endpoint POST /auth/login."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secreto123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Registra un nuevo usuario. Devuelve los datos del usuario creado (sin contraseña).\n\n**Códigos de respuesta:**\n- `201` — Usuario creado\n- `409` — El email ya está registrado\n- `422` — Error de validación"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('token', json.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', json.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"secreto123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Inicia sesión. El script de test guarda automáticamente `accessToken` y `refreshToken` en las variables de la colección.\n\n**Códigos de respuesta:**\n- `200` — Login exitoso\n- `401` — Credenciales inválidas\n- `422` — Error de validación"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('token', json.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "refresh"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Renueva el access token usando el refresh token. El script de test actualiza la variable `token`.\n\n**Códigos de respuesta:**\n- `200` — Nuevo access token generado\n- `401` — Refresh token inválido o expirado\n- `422` — Campo refreshToken obligatorio"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/logout", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "logout"] },
+            "description": "Cierra la sesión (el servidor invalida la sesión del lado del cliente). El cliente debe descartar los tokens.\n\n**Códigos de respuesta:**\n- `200` — Sesión cerrada\n- `401` — Token ausente o inválido"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=1&limit=20&sort=createdAt&order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Número de página (entero positivo)" },
+                { "key": "limit", "value": "20", "description": "Resultados por página (1-100)" },
+                { "key": "sort", "value": "createdAt", "description": "Campo: createdAt | username | email" },
+                { "key": "order", "value": "desc", "description": "Dirección: asc | desc" }
+              ]
+            },
+            "description": "Devuelve la lista de usuarios paginada. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Lista de usuarios\n- `401` — No autenticado\n- `422` — Query params inválidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "description": "Devuelve un usuario por su ID. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Usuario encontrado\n- `401` — No autenticado\n- `404` — Usuario no encontrado\n- `422` — ID inválido"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nuevonombre\",\n  \"email\": \"nuevo@example.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Actualiza parcialmente un usuario. Solo se modifican los campos enviados. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Usuario actualizado\n- `401` — No autenticado\n- `404` — Usuario no encontrado\n- `422` — Datos de entrada inválidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "description": "Elimina un usuario por su ID. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `204` — Usuario eliminado (sin cuerpo)\n- `401` — No autenticado\n- `404` — Usuario no encontrado"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "List Posts",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/posts?page=1&limit=20&sort=createdAt&order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "posts"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Número de página (entero positivo)" },
+                { "key": "limit", "value": "20", "description": "Resultados por página (1-100)" },
+                { "key": "sort", "value": "createdAt", "description": "Campo: createdAt | title" },
+                { "key": "order", "value": "desc", "description": "Dirección: asc | desc" }
+              ]
+            },
+            "description": "Devuelve la lista de posts paginada. No requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Lista de posts\n- `422` — Query params inválidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Post by ID",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "posts", "1"]
+            },
+            "description": "Devuelve un post con los datos de su autor. No requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Post encontrado\n- `404` — Post no encontrado\n- `422` — ID inválido"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/posts", "host": ["{{baseUrl}}"], "path": ["api", "v1", "posts"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Mi primer post\",\n  \"content\": \"Contenido del post...\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Crea un nuevo post asociado al usuario autenticado. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `201` — Post creado\n- `401` — No autenticado\n- `422` — Título o contenido vacíos"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Post (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "posts", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Título actualizado\",\n  \"content\": \"Contenido actualizado...\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Actualiza completamente un post. Solo el autor puede modificarlo. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `200` — Post actualizado\n- `401` — No autenticado\n- `403` — El usuario no es el autor\n- `404` — Post no encontrado\n- `422` — Datos de entrada inválidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "posts", "1"]
+            },
+            "description": "Elimina un post. Solo el autor puede eliminarlo. Requiere autenticación.\n\n**Códigos de respuesta:**\n- `204` — Post eliminado (sin cuerpo)\n- `401` — No autenticado\n- `403` — El usuario no es el autor\n- `404` — Post no encontrado"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
