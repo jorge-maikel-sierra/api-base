@@ -70,7 +70,7 @@ describe('POST /api/v1/auth/login', () => {
     await prisma.user.deleteMany({ where: { email: registerPayload.email } });
   });
 
-  it('debería devolver 200 y un access token con credenciales correctas', async () => {
+  it('debería devolver 200 con accessToken y refreshToken con credenciales correctas', async () => {
     const res = await request(app).post(endpoint).send({
       email: registerPayload.email,
       password: registerPayload.password,
@@ -78,6 +78,7 @@ describe('POST /api/v1/auth/login', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.data.accessToken).toBeDefined();
+    expect(res.body.data.refreshToken).toBeDefined();
   });
 
   it('debería devolver 401 con credenciales incorrectas', async () => {
@@ -93,5 +94,78 @@ describe('POST /api/v1/auth/login', () => {
     const res = await request(app).post(endpoint).send({ password: 'password123' });
 
     expect(res.status).toBe(422);
+  });
+});
+
+describe('POST /api/v1/auth/refresh', () => {
+  const endpoint = '/api/v1/auth/refresh';
+  let refreshToken;
+
+  beforeAll(async () => {
+    const user = await prisma.user.create({
+      data: {
+        username: 'refreshuser',
+        email: 'refreshuser@example.com',
+        password: '$2a$10$abcdefghijklmnopqrstuuVGmYiJtZ7Vd5/WUjbDQtM5Lk0v.mCy',
+      },
+    });
+    const tokens = await import('../../src/services/authService.js');
+    ({ refreshToken } = tokens.generateToken(user));
+  });
+
+  afterAll(async () => {
+    await prisma.user.deleteMany({ where: { email: 'refreshuser@example.com' } });
+  });
+
+  it('debería devolver 200 con un nuevo accessToken', async () => {
+    const res = await request(app).post(endpoint).send({ refreshToken });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.accessToken).toBeDefined();
+  });
+
+  it('debería devolver 401 con un refresh token inválido', async () => {
+    const res = await request(app).post(endpoint).send({ refreshToken: 'token.invalido.xxx' });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('debería devolver 422 si falta el refreshToken', async () => {
+    const res = await request(app).post(endpoint).send({});
+    expect(res.status).toBe(422);
+  });
+});
+
+describe('POST /api/v1/auth/logout', () => {
+  let token;
+
+  beforeAll(async () => {
+    const user = await prisma.user.create({
+      data: {
+        username: 'logoutuser',
+        email: 'logoutuser@example.com',
+        password: '$2a$10$abcdefghijklmnopqrstuuVGmYiJtZ7Vd5/WUjbDQtM5Lk0v.mCy',
+      },
+    });
+    const tokens = await import('../../src/services/authService.js');
+    ({ accessToken: token } = tokens.generateToken(user));
+  });
+
+  afterAll(async () => {
+    await prisma.user.deleteMany({ where: { email: 'logoutuser@example.com' } });
+  });
+
+  it('debería devolver 200 con mensaje de confirmación', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.message).toBeDefined();
+  });
+
+  it('debería devolver 401 sin token', async () => {
+    const res = await request(app).post('/api/v1/auth/logout');
+    expect(res.status).toBe(401);
   });
 });

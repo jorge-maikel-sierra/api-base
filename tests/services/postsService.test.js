@@ -81,14 +81,24 @@ describe('postsService.updatePost', () => {
 });
 
 describe('postsService.deletePost', () => {
+  let deletePostId;
+
+  beforeEach(async () => {
+    const p = await prisma.post.create({
+      data: { title: 'Para borrar', content: 'Contenido', authorId: author.id },
+    });
+    deletePostId = p.id;
+  });
+
+  afterEach(async () => {
+    await prisma.post.deleteMany({ where: { id: deletePostId } }).catch(() => {});
+  });
+
   it('debería lanzar ForbiddenError si el usuario no es el autor', async () => {
-    await expect(deletePost(postId, 999999)).rejects.toThrow(ForbiddenError);
+    await expect(deletePost(deletePostId, 999999)).rejects.toThrow(ForbiddenError);
   });
 
   it('debería eliminar el post si el usuario es el autor', async () => {
-    const temp = await prisma.post.create({
-      data: { title: 'Temp', content: 'Temp', authorId: author.id },
-    });
-    await expect(deletePost(temp.id, author.id)).resolves.toBeUndefined();
+    await expect(deletePost(deletePostId, author.id)).resolves.toBeUndefined();
   });
 });

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import passport from '../config/passport.js';
 import { validate } from '../middlewares/validate.js';
+import { authenticate } from '../middlewares/auth.js';
 import * as authController from '../controllers/authController.js';
 
 const router = Router();
@@ -98,5 +99,51 @@ router.post(
   passport.authenticate('local', { session: false }),
   authController.login,
 );
+
+/**
+ * @swagger
+ * /api/v1/auth/refresh:
+ *   post:
+ *     summary: Renovar access token con un refresh token válido
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Nuevo access token generado
+ *       401:
+ *         description: Refresh token inválido o expirado
+ *       422:
+ *         description: Error de validación
+ */
+router.post(
+  '/refresh',
+  [body('refreshToken').notEmpty().withMessage('El refresh token es obligatorio')],
+  validate,
+  authController.refresh,
+);
+
+/**
+ * @swagger
+ * /api/v1/auth/logout:
+ *   post:
+ *     summary: Cerrar sesión (el cliente debe descartar el token)
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Sesión cerrada correctamente
+ *       401:
+ *         description: No autorizado
+ */
+router.post('/logout', authenticate, authController.logout);
 
 export default router;

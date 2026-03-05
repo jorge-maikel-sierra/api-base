@@ -33,11 +33,25 @@ describe('authService.registerUser', () => {
 });
 
 describe('authService.generateToken', () => {
-  it('debería devolver un accessToken JWT', () => {
-    const fakeUser = { id: 1, email: 'test@example.com' };
+  const fakeUser = { id: 1, email: 'test@example.com' };
+
+  it('debería devolver un accessToken JWT válido', () => {
     const { accessToken } = generateToken(fakeUser);
 
     expect(typeof accessToken).toBe('string');
     expect(accessToken.split('.')).toHaveLength(3);
+  });
+
+  it('debería devolver un refreshToken JWT válido', () => {
+    const { refreshToken } = generateToken(fakeUser);
+
+    expect(typeof refreshToken).toBe('string');
+    expect(refreshToken.split('.')).toHaveLength(3);
+  });
+
+  it('accessToken y refreshToken deben ser distintos', () => {
+    const { accessToken, refreshToken } = generateToken(fakeUser);
+
+    expect(accessToken).not.toBe(refreshToken);
   });
 });
