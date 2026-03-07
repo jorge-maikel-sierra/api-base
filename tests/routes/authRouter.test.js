@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../../src/app.js';
-import { prisma } from '../../src/config/database.js';
+import app from '../../src/app';
+import { prisma } from '../../src/config/database';
 
 afterAll(async () => {
   await prisma.$disconnect();
@@ -109,7 +109,7 @@ describe('POST /api/v1/auth/refresh', () => {
         password: '$2a$10$abcdefghijklmnopqrstuuVGmYiJtZ7Vd5/WUjbDQtM5Lk0v.mCy',
       },
     });
-    const tokens = await import('../../src/services/authService.js');
+    const tokens = await import('../../src/services/authService');
     ({ refreshToken } = tokens.generateToken(user));
   });
 
@@ -147,7 +147,7 @@ describe('POST /api/v1/auth/logout', () => {
         password: '$2a$10$abcdefghijklmnopqrstuuVGmYiJtZ7Vd5/WUjbDQtM5Lk0v.mCy',
       },
     });
-    const tokens = await import('../../src/services/authService.js');
+    const tokens = await import('../../src/services/authService');
     ({ accessToken: token } = tokens.generateToken(user));
   });
 

@@ -1,6 +1,5 @@
-import { jest } from '@jest/globals';
-import { errorHandler } from '../../src/middlewares/errorHandler.js';
-import { AppError } from '../../src/errors/index.js';
+import { errorHandler } from '../../src/middlewares/errorHandler';
+import { AppError } from '../../src/errors/index';
 
 const mockRes = () => {
   const res = {};

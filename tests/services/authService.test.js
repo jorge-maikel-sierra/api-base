@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { prisma } from '../../src/config/database.js';
-import { registerUser, generateToken, refreshAccessToken } from '../../src/services/authService.js';
-import { ConflictError, UnauthorizedError } from '../../src/errors/index.js';
+import { prisma } from '../../src/config/database';
+import { registerUser, generateToken, refreshAccessToken } from '../../src/services/authService';
+import { ConflictError, UnauthorizedError } from '../../src/errors/index';
 
 afterAll(async () => {
   await prisma.$disconnect();

@@ -1,12 +1,12 @@
-import { prisma } from '../../src/config/database.js';
+import { prisma } from '../../src/config/database';
 import {
   findAll,
   findById,
   createPost,
   updatePost,
   deletePost,
-} from '../../src/services/postsService.js';
-import { NotFoundError, ForbiddenError } from '../../src/errors/index.js';
+} from '../../src/services/postsService';
+import { NotFoundError, ForbiddenError } from '../../src/errors/index';
 
 let author;
 let postId;

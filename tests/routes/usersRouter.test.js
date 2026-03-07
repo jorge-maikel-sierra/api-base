@@ -1,7 +1,7 @@
 import request from 'supertest';
-import app from '../../src/app.js';
-import { prisma } from '../../src/config/database.js';
-import * as authService from '../../src/services/authService.js';
+import app from '../../src/app';
+import { prisma } from '../../src/config/database';
+import * as authService from '../../src/services/authService';
 
 let token;
 let userId;
