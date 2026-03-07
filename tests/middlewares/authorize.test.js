@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { authorize } from '../../src/middlewares/authorize.js';
-import { ForbiddenError, UnauthorizedError } from '../../src/errors/AppError.js';
+import { ForbiddenError, UnauthorizedError } from '../../src/errors/index.js';
 
 const mockNext = jest.fn();
 

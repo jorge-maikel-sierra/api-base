@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
-import prisma from '../config/database';
+import { prisma } from '../config/database';
 import { ConflictError, UnauthorizedError } from '../errors';
 
 /**

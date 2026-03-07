@@ -11,7 +11,7 @@ import { ForbiddenError, UnauthorizedError } from '../errors';
  * @param {...string} roles - Roles permitidos para acceder al recurso.
  * @returns {Function} Middleware de Express
  */
-export default function authorize(...roles) {
+export function authorize(...roles) {
   return (req, res, next) => {
     if (!req.user) {
       return next(new UnauthorizedError('Debes iniciar sesión para acceder a este recurso'));
@@ -24,3 +24,5 @@ export default function authorize(...roles) {
     return next();
   };
 }
+
+export default authorize;

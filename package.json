@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "prisma-client-d830865669de0f714a9499e7134522abfb0e6df281ea83ff77c162a1b3e56808": "file:./generated/prisma",
     "apicache": "^1.6.3",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

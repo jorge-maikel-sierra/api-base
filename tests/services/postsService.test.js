@@ -6,7 +6,7 @@ import {
   updatePost,
   deletePost,
 } from '../../src/services/postsService.js';
-import { NotFoundError, ForbiddenError } from '../../src/errors/AppError.js';
+import { NotFoundError, ForbiddenError } from '../../src/errors/index.js';
 
 let author;
 let postId;

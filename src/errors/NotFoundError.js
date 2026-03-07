@@ -1,4 +1,4 @@
-import AppError from './AppError';
+import { AppError } from './AppError';
 
 export default class NotFoundError extends AppError {
   constructor(message = 'Recurso no encontrado') {

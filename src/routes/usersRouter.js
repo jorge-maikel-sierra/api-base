@@ -8,10 +8,9 @@ import * as usersController from '../controllers/usersController';
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
-const cache =
-  process.env.NODE_ENV === 'test'
-    ? () => (_req, _res, next) => next()
-    : (duration) => apicache.middleware(duration);
+const cache = process.env.NODE_ENV === 'test'
+  ? () => (_req, _res, next) => next()
+  : (duration) => apicache.middleware(duration);
 
 /**
  * @swagger

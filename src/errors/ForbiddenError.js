@@ -1,4 +1,4 @@
-import AppError from './AppError';
+import { AppError } from './AppError';
 
 export default class ForbiddenError extends AppError {
   constructor(message = 'Acceso denegado') {

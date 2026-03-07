@@ -1,6 +1,8 @@
 import { prisma } from '../../src/config/database.js';
-import { findAll, findById, updateUser, deleteUser } from '../../src/services/usersService.js';
-import { NotFoundError } from '../../src/errors/AppError.js';
+import {
+  findAll, findById, updateUser, deleteUser,
+} from '../../src/services/usersService.js';
+import { NotFoundError } from '../../src/errors/index.js';
 
 let userId;
 

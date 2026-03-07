@@ -8,10 +8,9 @@ import * as postsController from '../controllers/postsController';
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
-const cache =
-  process.env.NODE_ENV === 'test'
-    ? () => (_req, _res, next) => next()
-    : (duration) => apicache.middleware(duration);
+const cache = process.env.NODE_ENV === 'test'
+  ? () => (_req, _res, next) => next()
+  : (duration) => apicache.middleware(duration);
 
 /**
  * @swagger
@@ -221,7 +220,8 @@ router.post(
       .withMessage('El título es obligatorio')
       .isLength({ max: 200 })
       .withMessage('El título no puede superar los 200 caracteres'),
-    body('content').trim().escape().notEmpty().withMessage('El contenido es obligatorio'),
+    body('content').trim().escape().notEmpty()
+      .withMessage('El contenido es obligatorio'),
   ],
   validate,
   postsController.create,
@@ -302,7 +302,8 @@ router.put(
       .withMessage('El título es obligatorio')
       .isLength({ max: 200 })
       .withMessage('El título no puede superar los 200 caracteres'),
-    body('content').trim().escape().notEmpty().withMessage('El contenido es obligatorio'),
+    body('content').trim().escape().notEmpty()
+      .withMessage('El contenido es obligatorio'),
   ],
   validate,
   postsController.update,

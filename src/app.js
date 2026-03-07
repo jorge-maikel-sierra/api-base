@@ -7,7 +7,7 @@ import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import passport from './config/passport';
 import swaggerSpec from './config/swagger';
-import errorHandler from './middlewares/errorHandler';
+import { errorHandler } from './middlewares/errorHandler';
 import apiRouter from './routes/index';
 
 const app = express();
