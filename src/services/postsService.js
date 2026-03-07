@@ -7,7 +7,10 @@ import { NotFoundError, ForbiddenError } from '../errors';
  * @returns {Promise<{ data: object[], meta: object }>}
  */
 export const findAll = async ({
-  page = 1, limit = 20, sort = 'createdAt', order = 'desc',
+  page = 1,
+  limit = 20,
+  sort = 'createdAt',
+  order = 'desc',
 } = {}) => {
   const skip = (page - 1) * limit;
 

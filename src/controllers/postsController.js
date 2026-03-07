@@ -7,10 +7,16 @@ import * as postsService from '../services/postsService';
 export const getAll = async (req, res, next) => {
   try {
     const {
-      page = 1, limit = 20, sort = 'createdAt', order = 'desc',
+      page = 1,
+      limit = 20,
+      sort = 'createdAt',
+      order = 'desc',
     } = matchedData(req, { locations: ['query'] });
     const result = await postsService.findAll({
-      page: Number(page), limit: Number(limit), sort, order,
+      page: Number(page),
+      limit: Number(limit),
+      sort,
+      order,
     });
     return res.status(200).json(result);
   } catch (error) {

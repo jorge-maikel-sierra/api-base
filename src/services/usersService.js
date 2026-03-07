@@ -7,7 +7,10 @@ import { NotFoundError } from '../errors';
  * @returns {Promise<{ data: object[], meta: { total: number, page: number, limit: number } }>}
  */
 export const findAll = async ({
-  page = 1, limit = 20, sort = 'createdAt', order = 'desc',
+  page = 1,
+  limit = 20,
+  sort = 'createdAt',
+  order = 'desc',
 } = {}) => {
   const skip = (page - 1) * limit;
 
@@ -16,7 +19,10 @@ export const findAll = async ({
       skip,
       take: limit,
       select: {
-        id: true, username: true, email: true, createdAt: true,
+        id: true,
+        username: true,
+        email: true,
+        createdAt: true,
       },
       orderBy: { [sort]: order },
     }),
@@ -35,7 +41,10 @@ export const findById = async (id) => {
   const user = await prisma.user.findUnique({
     where: { id },
     select: {
-      id: true, username: true, email: true, createdAt: true,
+      id: true,
+      username: true,
+      email: true,
+      createdAt: true,
     },
   });
 
@@ -59,7 +68,10 @@ export const updateUser = async (id, data) => {
     where: { id },
     data,
     select: {
-      id: true, username: true, email: true, createdAt: true,
+      id: true,
+      username: true,
+      email: true,
+      createdAt: true,
     },
   });
 

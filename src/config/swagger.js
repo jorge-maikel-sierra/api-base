@@ -11,7 +11,6 @@ const options = {
     },
     servers: [
       {
-        /* istanbul ignore next */
         url: `http://localhost:${process.env.PORT ?? 3000}`,
         description: 'Servidor de desarrollo',
       },
@@ -90,7 +89,10 @@ const options = {
           required: ['username', 'email', 'password'],
           properties: {
             username: {
-              type: 'string', minLength: 3, maxLength: 30, example: 'johndoe',
+              type: 'string',
+              minLength: 3,
+              maxLength: 30,
+              example: 'johndoe',
             },
             email: { type: 'string', format: 'email', example: 'john@example.com' },
             password: { type: 'string', minLength: 8, example: 'secreto123' },
@@ -116,7 +118,10 @@ const options = {
           type: 'object',
           properties: {
             username: {
-              type: 'string', minLength: 3, maxLength: 30, example: 'nuevonombre',
+              type: 'string',
+              minLength: 3,
+              maxLength: 30,
+              example: 'nuevonombre',
             },
             email: { type: 'string', format: 'email', example: 'nuevo@example.com' },
           },

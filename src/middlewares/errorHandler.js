@@ -6,8 +6,7 @@ const logger = pino({ level: process.env.LOG_LEVEL ?? 'info' });
  * Middleware global de errores (4 parámetros).
  * Debe registrarse al final de todos los middlewares en app.js.
  */
-// eslint-disable-next-line no-unused-vars
-export default function errorHandler(err, req, res, next) {
+export default function errorHandler(err, req, res) {
   const statusCode = err.statusCode ?? 500;
   const message = err.statusCode ? err.message : 'Error interno del servidor';
 

@@ -65,7 +65,10 @@ const authRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: {
-    error: { message: 'Demasiadas solicitudes, intenta de nuevo en 15 minutos', code: 'TOO_MANY_REQUESTS' },
+    error: {
+      message: 'Demasiadas solicitudes, intenta de nuevo en 15 minutos',
+      code: 'TOO_MANY_REQUESTS',
+    },
   },
 });
 app.use('/api/v1/auth', authRateLimiter);

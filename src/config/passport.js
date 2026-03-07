@@ -7,7 +7,6 @@ import prisma from './database';
 passport.use(
   new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
-    /* istanbul ignore next */
     async (email, password, done) => {
       try {
         const user = await prisma.user.findUnique({ where: { email } });
@@ -53,9 +52,11 @@ passport.use(
   ),
 );
 
-passport.serializeUser(/* istanbul ignore next */ (user, done) => {
-  done(null, user.id);
-});
+passport.serializeUser(
+  /* istanbul ignore next */ (user, done) => {
+    done(null, user.id);
+  },
+);
 
 /* istanbul ignore next */
 passport.deserializeUser(async (id, done) => {

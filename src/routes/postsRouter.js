@@ -8,10 +8,10 @@ import * as postsController from '../controllers/postsController';
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
-/* istanbul ignore next */
-const cache = process.env.NODE_ENV === 'test'
-  ? () => (_req, _res, next) => next()
-  : (duration) => apicache.middleware(duration);
+const cache =
+  process.env.NODE_ENV === 'test'
+    ? () => (_req, _res, next) => next()
+    : (duration) => apicache.middleware(duration);
 
 /**
  * @swagger
@@ -86,15 +86,15 @@ router.get(
   cache('2 minutes'),
   [
     query('page').optional().isInt({ min: 1 }).withMessage('page debe ser un entero positivo'),
-    query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('limit debe estar entre 1 y 100'),
+    query('limit')
+      .optional()
+      .isInt({ min: 1, max: 100 })
+      .withMessage('limit debe estar entre 1 y 100'),
     query('sort')
       .optional()
       .isIn(['createdAt', 'title'])
       .withMessage('sort debe ser createdAt o title'),
-    query('order')
-      .optional()
-      .isIn(['asc', 'desc'])
-      .withMessage('order debe ser asc o desc'),
+    query('order').optional().isIn(['asc', 'desc']).withMessage('order debe ser asc o desc'),
   ],
   validate,
   postsController.getAll,
@@ -221,11 +221,7 @@ router.post(
       .withMessage('El título es obligatorio')
       .isLength({ max: 200 })
       .withMessage('El título no puede superar los 200 caracteres'),
-    body('content')
-      .trim()
-      .escape()
-      .notEmpty()
-      .withMessage('El contenido es obligatorio'),
+    body('content').trim().escape().notEmpty().withMessage('El contenido es obligatorio'),
   ],
   validate,
   postsController.create,
@@ -306,11 +302,7 @@ router.put(
       .withMessage('El título es obligatorio')
       .isLength({ max: 200 })
       .withMessage('El título no puede superar los 200 caracteres'),
-    body('content')
-      .trim()
-      .escape()
-      .notEmpty()
-      .withMessage('El contenido es obligatorio'),
+    body('content').trim().escape().notEmpty().withMessage('El contenido es obligatorio'),
   ],
   validate,
   postsController.update,

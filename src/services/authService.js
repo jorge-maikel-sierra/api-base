@@ -22,7 +22,10 @@ export const registerUser = async ({ username, email, password }) => {
     return tx.user.create({
       data: { username, email, password: hashedPassword },
       select: {
-        id: true, username: true, email: true, createdAt: true,
+        id: true,
+        username: true,
+        email: true,
+        createdAt: true,
       },
     });
   });
@@ -36,14 +39,10 @@ export const registerUser = async ({ username, email, password }) => {
  * @returns {{ accessToken: string, refreshToken: string }}
  */
 export const generateToken = (user) => {
-  /* istanbul ignore next */
-  const accessToken = jwt.sign(
-    { sub: user.id, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN ?? '1h' },
-  );
+  const accessToken = jwt.sign({ sub: user.id, email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
+  });
 
-  /* istanbul ignore next */
   const refreshToken = jwt.sign(
     { sub: user.id },
     process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET,
@@ -62,11 +61,7 @@ export const refreshAccessToken = async (refreshToken) => {
   let payload;
 
   try {
-    payload = jwt.verify(
-      refreshToken,
-      /* istanbul ignore next */
-      process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET,
-    );
+    payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET);
   } catch {
     throw new UnauthorizedError('Refresh token inválido o expirado');
   }
@@ -77,12 +72,9 @@ export const refreshAccessToken = async (refreshToken) => {
     throw new UnauthorizedError('Usuario no encontrado');
   }
 
-  const accessToken = jwt.sign(
-    { sub: user.id, email: user.email },
-    process.env.JWT_SECRET,
-    /* istanbul ignore next */
-    { expiresIn: process.env.JWT_EXPIRES_IN ?? '1h' },
-  );
+  const accessToken = jwt.sign({ sub: user.id, email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
+  });
 
   return { accessToken };
 };
