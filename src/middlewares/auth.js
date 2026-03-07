@@ -1,11 +1,11 @@
-import passport from '../config/passport.js';
-import { UnauthorizedError } from '../errors/AppError.js';
+import passport from '../config/passport';
+import { UnauthorizedError } from '../errors';
 
 /**
  * Middleware que verifica el token JWT mediante Passport JWTStrategy.
  * Responde 401 si el token es inválido o está ausente.
  */
-export const authenticate = (req, res, next) => {
+export default function authenticate(req, res, next) {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) return next(err);
 
@@ -16,4 +16,4 @@ export const authenticate = (req, res, next) => {
     req.user = user;
     return next();
   })(req, res, next);
-};
+}

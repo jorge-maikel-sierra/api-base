@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import passport from '../config/passport.js';
-import { validate } from '../middlewares/validate.js';
-import { authenticate } from '../middlewares/auth.js';
-import * as authController from '../controllers/authController.js';
+import passport from '../config/passport';
+import validate from '../middlewares/validate';
+import authenticate from '../middlewares/auth';
+import * as authController from '../controllers/authController';
 
 const router = Router();
 

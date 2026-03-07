@@ -1,5 +1,5 @@
 import { matchedData } from 'express-validator';
-import * as authService from '../services/authService.js';
+import * as authService from '../services/authService';
 
 /**
  * POST /api/v1/auth/register
@@ -43,8 +43,8 @@ export const refresh = async (req, res, next) => {
  * Con JWT stateless el logout se gestiona en el cliente eliminando el token.
  * Este endpoint confirma la operación y puede extenderse con una lista negra.
  */
-export const logout = (req, res) => {
+export function logout(req, res) {
   // JWT es stateless: el cliente debe descartar el token.
   // Para invalidación server-side, implementar una blocklist en Redis.
   return res.status(200).json({ data: { message: 'Sesión cerrada correctamente' } });
-};
+}

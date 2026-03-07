@@ -89,7 +89,9 @@ const options = {
           type: 'object',
           required: ['username', 'email', 'password'],
           properties: {
-            username: { type: 'string', minLength: 3, maxLength: 30, example: 'johndoe' },
+            username: {
+              type: 'string', minLength: 3, maxLength: 30, example: 'johndoe',
+            },
             email: { type: 'string', format: 'email', example: 'john@example.com' },
             password: { type: 'string', minLength: 8, example: 'secreto123' },
           },
@@ -113,7 +115,9 @@ const options = {
         UserPatchInput: {
           type: 'object',
           properties: {
-            username: { type: 'string', minLength: 3, maxLength: 30, example: 'nuevonombre' },
+            username: {
+              type: 'string', minLength: 3, maxLength: 30, example: 'nuevonombre',
+            },
             email: { type: 'string', format: 'email', example: 'nuevo@example.com' },
           },
         },
@@ -124,4 +128,4 @@ const options = {
   apis: ['./src/routes/*.js'],
 };
 
-export const swaggerSpec = swaggerJsdoc(options);
+export default swaggerJsdoc(options);

@@ -1,12 +1,14 @@
-import { prisma } from '../config/database.js';
-import { NotFoundError, ForbiddenError } from '../errors/AppError.js';
+import prisma from '../config/database';
+import { NotFoundError, ForbiddenError } from '../errors';
 
 /**
  * Obtiene una lista paginada de posts publicados.
  * @param {{ page: number, limit: number, sort: string, order: string }} options
  * @returns {Promise<{ data: object[], meta: object }>}
  */
-export const findAll = async ({ page = 1, limit = 20, sort = 'createdAt', order = 'desc' } = {}) => {
+export const findAll = async ({
+  page = 1, limit = 20, sort = 'createdAt', order = 'desc',
+} = {}) => {
   const skip = (page - 1) * limit;
 
   const [posts, total] = await Promise.all([

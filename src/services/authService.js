@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
-import { prisma } from '../config/database.js';
-import { ConflictError, UnauthorizedError } from '../errors/AppError.js';
+import prisma from '../config/database';
+import { ConflictError, UnauthorizedError } from '../errors';
 
 /**
  * Registra un nuevo usuario en la base de datos.
@@ -21,7 +21,9 @@ export const registerUser = async ({ username, email, password }) => {
 
     return tx.user.create({
       data: { username, email, password: hashedPassword },
-      select: { id: true, username: true, email: true, createdAt: true },
+      select: {
+        id: true, username: true, email: true, createdAt: true,
+      },
     });
   });
 

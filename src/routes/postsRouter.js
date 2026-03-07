@@ -1,18 +1,17 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 import apicache from 'apicache';
-import { authenticate } from '../middlewares/auth.js';
-import { validate } from '../middlewares/validate.js';
-import * as postsController from '../controllers/postsController.js';
+import authenticate from '../middlewares/auth';
+import validate from '../middlewares/validate';
+import * as postsController from '../controllers/postsController';
 
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
 /* istanbul ignore next */
-const cache =
-  process.env.NODE_ENV === 'test'
-    ? () => (_req, _res, next) => next()
-    : (duration) => apicache.middleware(duration);
+const cache = process.env.NODE_ENV === 'test'
+  ? () => (_req, _res, next) => next()
+  : (duration) => apicache.middleware(duration);
 
 /**
  * @swagger

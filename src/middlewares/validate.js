@@ -4,7 +4,7 @@ import { validationResult } from 'express-validator';
  * Middleware que ejecuta validationResult() y responde 422 si hay errores.
  * Debe encadenarse después de los validadores de express-validator.
  */
-export const validate = (req, res, next) => {
+export default function validate(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -18,4 +18,4 @@ export const validate = (req, res, next) => {
   }
 
   return next();
-};
+}

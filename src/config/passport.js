@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import bcryptjs from 'bcryptjs';
-import { prisma } from './database.js';
+import prisma from './database';
 
 passport.use(
   new LocalStrategy(
