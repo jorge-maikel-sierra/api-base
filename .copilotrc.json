@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    {
+      "name": "copilot-sdk",
+      "enabled": true,
+      "version": "1.0.0"
+    }
+  ],
+  "instructions": {
+    "path": ".github/copilot-instructions.md",
+    "use_workspace_context": true
+  },
+  "preferences": {
+    "language": "es",
+    "code_style": "airbnb",
+    "test_framework": "jest",
+    "orm": "prisma",
+    "validate_code": true
+  }
+}
