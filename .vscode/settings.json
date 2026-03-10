@@ -1,0 +1,17 @@
+{
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": true
+  },
+  "github.copilot.chat.localeOverride": "es",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "always"
+    }
+  },
+  "editor.guides.bracketPairs": true,
+  "editor.minimap.enabled": true
+}

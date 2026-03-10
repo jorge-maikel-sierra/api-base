@@ -22,7 +22,6 @@ coverage/
 Thumbs.db
 
 # Editor
-.vscode/
 .idea/
 *.swp
 *.swo
