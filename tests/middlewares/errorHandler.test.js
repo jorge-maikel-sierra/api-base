@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { errorHandler } from '../../src/middlewares/errorHandler';
 import { AppError } from '../../src/errors/index';
 

@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { authorize } from '../../src/middlewares/authorize';
 import { ForbiddenError, UnauthorizedError } from '../../src/errors/index';
 
