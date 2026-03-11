@@ -3,6 +3,7 @@ module.exports = {
   env: { node: true, es2022: true, jest: true },
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   rules: {
-    // Solo overrides justificados — NO agregar reglas para silenciar errores del código
+    // Permitir importaciones con extensión .js necesarias para Node ESM
+    'import/extensions': 'off',
   },
 };

@@ -1,5 +1,5 @@
 import { matchedData } from 'express-validator';
-import * as authService from '../services/authService';
+import * as authService from '../services/authService.js';
 
 /**
  * POST /api/v1/auth/register

@@ -1,5 +1,5 @@
 import { matchedData } from 'express-validator';
-import * as usersService from '../services/usersService';
+import * as usersService from '../services/usersService.js';
 
 /**
  * GET /api/v1/users

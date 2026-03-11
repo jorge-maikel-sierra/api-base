@@ -1,5 +1,5 @@
-import { prisma } from '../config/database';
-import { NotFoundError } from '../errors';
+import { prisma } from '../config/database.js';
+import { NotFoundError } from '../errors/index.js';
 
 /**
  * Obtiene una lista paginada de usuarios.

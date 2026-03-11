@@ -5,10 +5,10 @@ import pinoHttp from 'pino-http';
 import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
-import passport from './config/passport';
-import swaggerSpec from './config/swagger';
-import { errorHandler } from './middlewares/errorHandler';
-import apiRouter from './routes/index';
+import passport from './config/passport.js';
+import swaggerSpec from './config/swagger.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import apiRouter from './routes/index.js';
 
 const app = express();
 

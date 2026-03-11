@@ -1,16 +1,17 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 import apicache from 'apicache';
-import authenticate from '../middlewares/auth';
-import validate from '../middlewares/validate';
-import * as usersController from '../controllers/usersController';
+import authenticate from '../middlewares/auth.js';
+import validate from '../middlewares/validate.js';
+import * as usersController from '../controllers/usersController.js';
 
 const router = Router();
 
 // Cache activo solo fuera del entorno de test
-const cache = process.env.NODE_ENV === 'test'
-  ? () => (_req, _res, next) => next()
-  : (duration) => apicache.middleware(duration);
+const cache =
+  process.env.NODE_ENV === 'test'
+    ? () => (_req, _res, next) => next()
+    : (duration) => apicache.middleware(duration);
 
 /**
  * @swagger

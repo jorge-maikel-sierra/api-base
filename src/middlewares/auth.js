@@ -1,5 +1,5 @@
-import passport from '../config/passport';
-import { UnauthorizedError } from '../errors';
+import passport from '../config/passport.js';
+import { UnauthorizedError } from '../errors/index.js';
 
 /**
  * Middleware que verifica el token JWT mediante Passport JWTStrategy.

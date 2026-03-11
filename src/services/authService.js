@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
-import { prisma } from '../config/database';
-import { ConflictError, UnauthorizedError } from '../errors';
+import { prisma } from '../config/database.js';
+import { ConflictError, UnauthorizedError } from '../errors/index.js';
 
 /**
  * Registra un nuevo usuario en la base de datos.

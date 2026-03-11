@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import passport from '../config/passport';
-import validate from '../middlewares/validate';
-import authenticate from '../middlewares/auth';
-import * as authController from '../controllers/authController';
+import passport from '../config/passport.js';
+import validate from '../middlewares/validate.js';
+import authenticate from '../middlewares/auth.js';
+import * as authController from '../controllers/authController.js';
 
 const router = Router();
 
@@ -71,8 +71,7 @@ router.post(
       .withMessage('El nombre de usuario solo puede contener letras y números')
       .isLength({ min: 3, max: 30 })
       .withMessage('Debe tener entre 3 y 30 caracteres'),
-    body('email').trim().isEmail().withMessage('Debe ser un email válido')
-      .normalizeEmail(),
+    body('email').trim().isEmail().withMessage('Debe ser un email válido').normalizeEmail(),
     body('password')
       .trim()
       .isLength({ min: 8 })
@@ -132,8 +131,7 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').trim().isEmail().withMessage('Debe ser un email válido')
-      .normalizeEmail(),
+    body('email').trim().isEmail().withMessage('Debe ser un email válido').normalizeEmail(),
     body('password').trim().notEmpty().withMessage('La contraseña es obligatoria'),
   ],
   validate,

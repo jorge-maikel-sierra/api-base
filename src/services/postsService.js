@@ -1,5 +1,5 @@
-import { prisma } from '../config/database';
-import { NotFoundError, ForbiddenError } from '../errors';
+import { prisma } from '../config/database.js';
+import { NotFoundError, ForbiddenError } from '../errors/index.js';
 
 /**
  * Obtiene una lista paginada de posts publicados.

@@ -1,4 +1,4 @@
-import { AppError } from './AppError';
+import { AppError } from './AppError.js';
 
 export default class ConflictError extends AppError {
   constructor(message = 'El recurso ya existe') {
