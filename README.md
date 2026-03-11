@@ -94,3 +94,21 @@ server.js            # Punto de entrada (solo app.listen)
 | DELETE | `/api/v1/posts/:id`     | Eliminar post        | Sí   |
 
 La documentación Swagger está disponible en `/api/docs` en entornos no productivos.
+
+## Extensión de VS Code recomendada
+
+Se instaló la extensión de la comunidad `Qwen` (id: `kingleo.qwen`) para asistencia contextual y autocompletado en Node/Express. Esta extensión ofrece sugerencias asistidas por IA y ayuda para generar fragmentos y documentación dentro del editor.
+
+Cómo comprobarla y usarla:
+
+- Ver extensiones instaladas en tu VS Code:
+
+```bash
+code --list-extensions --show-versions | grep kingleo.qwen || true
+```
+
+- En el editor, abre cualquier archivo de `src/` (por ejemplo `src/app.js`) y empieza a escribir rutas o middleware de Express; Qwen ofrecerá sugerencias y snippets contextuales.
+
+- Si detectas problemas visuales o un error relacionado con Electron al instalar, intenta actualizar VS Code a la última versión y reinstalar la extensión.
+
+Si prefieres otra extensión, puedo desinstalar `kingleo.qwen` e instalar una alternativa.
